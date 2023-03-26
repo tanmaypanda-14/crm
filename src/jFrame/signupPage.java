@@ -8,9 +8,12 @@ package jFrame;
  *
  * @author admin
  */
+import java.sql.ResultSet;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import javax.swing.JOptionPane;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class signupPage extends javax.swing.JFrame {
 
@@ -20,6 +23,7 @@ public class signupPage extends javax.swing.JFrame {
     public signupPage() {
         initComponents();
     }
+
     public void insertSignUpDetails() {
         String username = txt_username.getText();
         String pwd = txt_password.getText();
@@ -46,6 +50,53 @@ public class signupPage extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
+    // Validation
+
+    public boolean validateSignUp() {
+        String username = txt_username.getText();
+        String pwd = txt_password.getText();
+        String email = txt_email.getText();
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
+                            "[a-zA-Z0-9_+&*-]+)*@" +
+                            "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
+                            "A-Z]{2,7}$";
+        Pattern pat = Pattern.compile(emailRegex);
+        boolean val=pat.matcher(email).matches();
+        
+
+        if (username.equals("")) {
+            JOptionPane.showMessageDialog(this, "Please enter username");
+            return false;
+        } else if (pwd.equals("")) {
+            JOptionPane.showMessageDialog(this, "Please enter password");
+            return false;
+        } else if (email.equals("") || val == false ) {
+            JOptionPane.showMessageDialog(this, "Please enter email correctly");
+            return false;
+        }
+        return true;
+    }
+
+    // duplicate values check
+    public boolean checkDuplicateUser() {
+        String email = txt_email.getText();
+        boolean isExisting = false;
+        try {
+            Connection con = dbConnection.getConnection();
+            PreparedStatement pst = con.prepareStatement("select * from users where email = ?");
+            pst.setString(1, email);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                isExisting = true;
+            } else {
+                isExisting = false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return isExisting;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -54,6 +105,7 @@ public class signupPage extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -251,9 +303,10 @@ public class signupPage extends javax.swing.JFrame {
 
     private void rSMaterialButtonRectangle1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSMaterialButtonRectangle1ActionPerformed
         // TODO add your handling code here:
-        insertSignUpDetails();
+        if (validateSignUp() == true) {
+            insertSignUpDetails();
+        }
     }//GEN-LAST:event_rSMaterialButtonRectangle1ActionPerformed
-
     private void rSMaterialButtonRectangle2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSMaterialButtonRectangle2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_rSMaterialButtonRectangle2ActionPerformed
