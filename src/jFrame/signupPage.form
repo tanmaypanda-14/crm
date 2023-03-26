@@ -268,6 +268,9 @@
             </Property>
             <Property name="placeholder" type="java.lang.String" value="Enter username"/>
           </Properties>
+          <Events>
+            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txt_usernameFocusLost"/>
+          </Events>
         </Component>
         <Component class="app.bolivia.swing.JCTextField" name="txt_email">
           <Properties>
@@ -284,6 +287,9 @@
             </Property>
             <Property name="placeholder" type="java.lang.String" value="Enter email"/>
           </Properties>
+          <Events>
+            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txt_emailFocusLost"/>
+          </Events>
         </Component>
         <Component class="app.bolivia.swing.JCTextField" name="txt_password">
           <Properties>
